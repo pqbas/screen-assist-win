@@ -1,0 +1,13 @@
+{
+    "downloads_folder": "seb-overlay-downloads",
+    "patch": {
+        "name": "SEBPatch_1.5.2.exe",
+        "version": "1.5.2",
+        "url": "https://github.com/school-cheating/SEBPatch/releases/download/v1.5.2_3.9.0.787/patch-seb.exe"
+    },
+    "seb": {
+        "name": "SEB_3.9.0_SetupBundle.exe",
+        "version": "3.9.0",
+        "url": "https://github.com/SafeExamBrowser/seb-win-refactoring/releases/download/v3.9.0/SEB_3.9.0.787_SetupBundle.exe"
+    }
+}
