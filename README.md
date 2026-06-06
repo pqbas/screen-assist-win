@@ -122,3 +122,8 @@ Three/Four finger swipe -> Opens Task View
 
 > [!NOTE]
 > I hope at this point it is clear how this works. If you have any confusions setting this up, feel free to open an issue here. I would reply.
+
+
+## Contributing
+
+Just make your changes and do a pull request. Explain what you did and how it helps. I turn a PR down only if it smells like its LLM-ed.
