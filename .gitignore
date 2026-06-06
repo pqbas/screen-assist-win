@@ -6,6 +6,6 @@
 **/__pycache__
 
 # heavy files
-**/*.png
+demo.png
 **/*.txt
 seb-overlay-downloads/
