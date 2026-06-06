@@ -1,7 +1,7 @@
 from setup.utils import generate_download_path, load_config, download_github_source
 
 
-def download_seb():
+def download_seb(autopilot: bool):
     """
     Downloads a compatible version of Safe Exam Browser.
     """
@@ -13,8 +13,9 @@ def download_seb():
     target_url = config["seb"]["url"]
 
     print()
-    choice = input(f"Do you agree to downloading and installing Safe Exam Browser {seb_version}? (y/n): ")
-    if choice.lower() not in ["y", "yes"]:
+    if not autopilot and (input(
+        f"Do you agree to downloading and installing Safe Exam Browser {seb_version}? (y/n): ")
+        .lower() not in ["y", "yes"]):
         print()
         print("SEB installation cancelled by user.")
         return

@@ -13,22 +13,20 @@ def run():
     # Create a shortcut on the user's desktop for the patched thingy
     # Give them instructions on how to use it
 
+    autopilot = False
+
     print()
     print("---------- SEB PATCH SETUP ----------")
     print()
-    choice = input("Do you want to patch SEB? (y/n): ")
-    if choice.lower() not in ["y", "yes"]:
-        print()
-        print("Setup cancelled by user.")
-        return
+    autopilot = input("Run this patch on autopilot? (choose no if unsure) (y/n): ") in ["y", "yes"]
 
     print()
     print("Handling control over to downloads.controller...")
-    setup.downloads.controller.run()
+    setup.downloads.controller.run(autopilot)
 
     print()
     print("Handling control over to installation.controller...")
-    setup.installation.controller.run()
+    setup.installation.controller.run(autopilot)
 
     print()
     print("Setup completed successfully!")

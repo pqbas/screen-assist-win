@@ -1,7 +1,7 @@
 from setup.utils import load_config, generate_download_path, pause, run_exe
 
 
-def install_seb():
+def install_seb(autopilot: bool):
     """
     Installs Safe Exam Browser.
     """
@@ -15,8 +15,9 @@ def install_seb():
         return
 
     print()
-    choice = input(f"Do you agree to installing Safe Exam Browser {config['seb']['version']}? (y/n): ")
-    if choice.lower() not in ["y", "yes"]:
+    if not autopilot and (input(
+        f"Do you agree to installing Safe Exam Browser {config['seb']['version']}? (y/n): ")
+        .lower() not in ["y", "yes"]):
         print()
         print("SEB installation cancelled by user.")
         return

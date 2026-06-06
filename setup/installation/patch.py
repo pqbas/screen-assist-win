@@ -1,7 +1,7 @@
 from setup.utils import load_config, generate_download_path, pause, run_exe
 
 
-def install_patch():
+def install_patch(autopilot: bool):
     """
     Installs the patch for Safe Exam Browser.
     """
@@ -15,8 +15,9 @@ def install_patch():
         return
 
     print()
-    choice = input(f"Do you agree to installing the SEB Patch {config['patch']['version']}? (y/n): ")
-    if choice.lower() not in ["y", "yes"]:
+    if not autopilot and (input(
+        f"Do you agree to installing the SEB Patch {config['patch']['version']}? (y/n): ")
+        .lower() not in ["y", "yes"]):
         print()
         print("Patch installation cancelled by user.")
         return

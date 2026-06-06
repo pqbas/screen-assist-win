@@ -1,7 +1,7 @@
 from setup.utils import load_config, download_github_source, generate_download_path
 
 
-def download_patch():
+def download_patch(autopilot: bool):
     """
     Downloads the latest version of the patch.
     """
@@ -13,8 +13,9 @@ def download_patch():
     target_file_path = generate_download_path(config["patch"]["name"])
 
     print()
-    choice = input(f"Do you agree to downloading the SEB Patch {patch_version}? (y/n): ")
-    if choice.lower() not in ["y", "yes"]:
+    if not autopilot and (input(
+        f"Do you agree to downloading the SEB Patch {patch_version}? (y/n): ")
+        .lower() not in ["y", "yes"]):
         print()
         print("Patch download cancelled by user.")
         return
