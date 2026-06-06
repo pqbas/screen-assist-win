@@ -1,6 +1,6 @@
-## Safe Exam Browser Overlay
+## Safe Exam Browser Overlay for Windows
 
-Safe Exam Browser Patches available publicily somehow seem too difficult to use. This repository provides a single-run script that you can use for a setup. Just download the `setup.exe` from releases, run it, and you're good to go.
+Safe Exam Browser Patches available publicily somehow seem too difficult to use. This repository provides a single-run script that you can use for a setup. Just download the latest `setup.exe` from releases, run it, and you're good to go.
 
 
 > [!IMPORTANT]
@@ -19,7 +19,7 @@ This documentation bellow is 100% manually typed (in this era of LLMs). I apprec
 
 Safe Browser is developed in c#, which can be decompiled and it's code can then be modified and easily used for cheating. On top of that, it's code is publicily available on GitHub [here](https://github.com/SafeExamBrowser/seb-win-refactoring), which proves it is "not safe at all".
 
-But there is one way to prevent cheating at all, which is to have the student sign-in and take the exam in a teacher-owned computer with the latest version of safe-browser installed OR by using the [SEB Windows Verifier Tool](https://github.com/SafeExamBrowser/seb-win-verificator)
+But there is one way to prevent cheating completely, which is to have the student sign-in and take the exam in a teacher-owned computer with the latest version of safe-browser installed OR by using the [SEB Windows Verifier Tool](https://github.com/SafeExamBrowser/seb-win-verificator)
 
 
 ---
@@ -31,16 +31,16 @@ I came across a challenge to patch Safe Exam Browser. I discovered that most of 
 
 One of the partially working patches that I found was this one: [school-cheating/SEBPatch](https://github.com/school-cheating/SEBPatch). I dived in to discover how it worked and what it was missing.
 
-Welp, for the patch itself, it's UI screen looks like this (for v1.5.2 release as on GitHub):
+Well, for the patch itself, it looks like this (as of [v1.5.2 release](https://github.com/school-cheating/SEBPatch/releases/tag/v1.5.2_3.9.0.787)):
 
 <br />
-<img />
+<img src="https://drive.google.com/uc?export=view&id=1_7e6efYbXPae1CKrw-uqAlHcvqDk4AmN" width="600" />
 <br />
 
-Its surprisingly well-made, for whoever put effort into it. But it looks like the developer intentionally/unknowingly missed the main purpose there, which was to keep the UI looking like the original. For instance, this is what the UI looks like after applying the patch:
+Its surprisingly well-made, for the unknown developer who put this much effort into it. But it looks like they intentionally/unknowingly missed the main purpose there, which was to keep the UI looking like the original. For instance, this is what the Safe Browser UI looks like after applying the patch:
 
 <br />
-<img />
+<img src="https://drive.google.com/uc?export=view&id=1ED76lOhexxoib-gRNTV8DGu1BV1cYclH" width="600" />
 <br />
 
 This introduces a lot of problems:
@@ -50,7 +50,8 @@ This introduces a lot of problems:
 - SEB on pressing the close button crashes, and takes about 20 seconds to crash too.
 - The windows taskbar is visible. Although it can be hidden, it's inconvenient to hide it every time we have an exam. (specifically for students who have quizzes on SEB)
 - The patch allows us to use our shortcut keys, but perhaps too many. Imagine accidently pressing the window key right when an invigilator is passing by. I think I don't have to explain what happens next.
-- Having to switch to a browser to search for an answer is still not feasible.
+- Having to switch to another browser to search for an answer is still not feasible.
+- Having to install the correct version of SEB confuses many people (judging by the issues in that repository).
 
 
 These above, and several other reasons are why this repository exists.
@@ -61,13 +62,9 @@ These above, and several other reasons are why this repository exists.
 
 ## What this repository offers
 
-It basically has two modules:
+- `setup/`
 
-- An Overlay (the important one)
-
-This is exactly what it sounds like. An overlay, a few elements on top of your windows screen using `.png` images. These cover for the visible windows taskbar and the modified buttons on the patch.
-
-As for the shortcut keys, they are temporarily disabled when the script is run. Details for which keys are disabled are [here]().
+This module when run allows for installation of 
 
 - MCQ solver using OCR
 
@@ -81,11 +78,9 @@ And, for the sake of avoiding pressing/holding a lot I have considered using onl
 ---
 
 
-## Setup (this is very complex, trust)
+## Setup
 
-MAKE SURE YOU ARE ON WINDOWS or MacOS and you have python installed!!
-
-> SEB does not run on linux
+Make sure you have python 3.11+ installed before starting from here.
 
 1) Go to your projects folder, clone this repository and enter it:
 
@@ -94,69 +89,35 @@ git clone https://github.com/ShahzaibAhmad05/seb-overlay
 cd seb-overlay
 ```
 
-2) Activate a virtual environment and activate it **(optional, skip if you are unfamiliar)**:
-
-```bash
-# it will work with older/newer versions as well
-# but I have used this one
-py -3.13 -m venv .venv
-```
-
 3) Install the requirements:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-3) Install Safe Exam Browser [VERSION] (the original one) from [here]().
-
-4) Close everything on your desktop and run capture module. This will snip and save images into `/assets`
+4) Run the setup module and follow the instructions in the terminal:
 
 ```bash
-python -m capture
+python -m setup
 ```
 
-5) Now it's time to patch SEB. Download the patch [VERSION] from [here](), and run it.
-
-6) Open SEB on your desktop to make sure it is patched. It should look like this:
-
-[IMAGE]
-
-7) Open the `seb-overlay` project again. Run the overlay:
+5) Now run the overlay in a terminal (you'd have to kill this terminal later, because of stubborn keyboard hooks):
 
 ```bash
 python -m overlay
 ```
 
-8) An overlay will popup on the screen. It will stay on the top of the screen by default. There is a key `TOGGLE_OVERLAY` in `config.json`. By default it is set to *Ctrl+Alt+T* which is the safest I could figure out. `Win` key is disabled automatically by this script.
+6) An overlay will popup on the screen. It will stay on the top of the screen by default. Try pressing *Ctrl+Alt+T* and the overlay should hide (aka press this shortcut immediately whenever SEB launches). `Win` key is disabled automatically by this script.
 
-9) Make sure to turn off these shortcuts from windows settings "in the name of safety": 
+7) Make sure to turn off these shortcuts from windows settings "in the name of safety": 
 
 ```txt
 Ctrl+Win+ArrowKey -> Changes the desktop view
 Three/Four finger swipe -> Opens Task View
 ```
 
-I prefer not to write an extra 50-line documentation on how to turn these off, so figure it out on runtime. Rest of the steps on the setup are completely optional. 
+8) There is a half-built question solver module that I put in. It is turned on by default, you basically just press `M` (does OCR and sends the api request to Gemini) and `L` key (displays the answer at a corner of the screen) to use it. If you wish to use it, You may also need to put your gemini api keys in `.env` 
 
-I would want you to find your own way to solve your exam from here since you have the overlay module running.
-
-10) Now SEB should look real. But since we turned off our VERY useful shortcut keys, we have to use the `mcq` module to be able to solve the exam. First create the `.env` file using the command bellow and put in your Gemini api keys, which you can get from [here]().
-
-```bash
-cp .env.example .env
-```
-
-11) Now run the `mcq` module:
-
-```bash
-python -m mcq
-```
-
-12) The default keys for using this script would be `M` for the OCR, and `L` for displaying the answer. You may also need to put your gemini api keys in `.env` 
-
-13) Now when you press `M`, an OCR is taken, and after a time interval of a few seconds, the answer is fetched and saved. When you press `L`, the answer will display at the corner of your screen.
 
 > [!NOTE]
 > I hope at this point it is clear how this works. If you have any confusions setting this up, feel free to open an issue here. I would reply.
-
