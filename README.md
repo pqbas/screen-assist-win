@@ -1,22 +1,25 @@
 ## Safe Exam Browser Overlay
 
+Safe Exam Browser Patches available publicily somehow seem too difficult to use. This repository provides a single-run script that you can use for a setup. Just download the `setup.exe` from releases, run it, and you're good to go.
+
+
 > [!IMPORTANT]
 > This repository is only meant to **expose the unsafe side** of safe exam browser and indirectly give the original developers ideas to make it safer.
 >
-> I am NOT allowing anyone using this overlay project in any way to cheat in exams and it is NOT open-source. Further details are explicitly stated in the [LICENSE]().
+> The developer is NOT responsible for anyone using this overlay project in any way to cheat in exams and it is NOT open-source. Further details are explicitly stated in the [LICENSE](https://github.com/ShahzaibAhmad05/seb-overlay).
 
 
-This documentation bellow is fully typed by me. I appreciate anyone reading. One thing to note is that in some places I have used the acronym SEB which essentially just means **Safe Exam Browser**.
-
-And for the sake of simplicity, I have not considered MacOS users for this project since neither do I nor any of my friends have a Mac.
+This documentation bellow is 100% manually typed (in this era of LLMs). I appreciate anyone reading. One thing to note is that in some places I have used the acronym SEB which essentially just means **Safe Exam Browser**.
 
 
 ---
 
 
-### If you are here to just patch SEB and cheat in Exams
+## If you are a Teacher
 
-This is not the project you are looking for. Go away please.
+Safe Browser is developed in c#, which can be decompiled and it's code can then be modified and easily used for cheating. On top of that, it's code is publicily available on GitHub [here](https://github.com/SafeExamBrowser/seb-win-refactoring), which proves it is "not safe at all".
+
+But there is one way to prevent cheating at all, which is to have the student sign-in and take the exam in a teacher-owned computer with the latest version of safe-browser installed OR by using the [SEB Windows Verifier Tool](https://github.com/SafeExamBrowser/seb-win-verificator)
 
 
 ---
@@ -24,35 +27,41 @@ This is not the project you are looking for. Go away please.
 
 ## What did I do
 
-I am using an existing patch for SEB which can be setup using the instructions in [the section bellow]. After applying this patch safe browser is modified. Now it will not stop the user from opening an instance of an LLM in another desktop view.
+I came across a challenge to patch Safe Exam Browser. I discovered that most of the [existing patches](https://github.com/topics/seb-bypass) for Safe Exam Browser are either outdated, or only partially work. 
 
-However, as you may observe bellow, this patched version of safe browser looks quite different from the original one. The windows taskbar is now visible and some buttons have changed their styling. The changes are quite noticable actually.
+One of the partially working patches that I found was this one: [school-cheating/SEBPatch](https://github.com/school-cheating/SEBPatch). I dived in to discover how it worked and what it was missing.
 
-[IMAGES]
+Welp, for the patch itself, it's UI screen looks like this (for v1.5.2 release as on GitHub):
+
+<br />
+<img />
+<br />
+
+Its surprisingly well-made, for whoever put effort into it. But it looks like the developer intentionally/unknowingly missed the main purpose there, which was to keep the UI looking like the original. For instance, this is what the UI looks like after applying the patch:
+
+<br />
+<img />
+<br />
+
+This introduces a lot of problems:
+
+- The original taskbar of the safe exam browser is gone. Any invigilator looking at it would instantly recognize it's a fake.
+- There are extra buttons on the UI which we don't need and look fake too.
+- SEB on pressing the close button crashes, and takes about 20 seconds to crash too.
+- The windows taskbar is visible. Although it can be hidden, it's inconvenient to hide it every time we have an exam. (specifically for students who have quizzes on SEB)
+- The patch allows us to use our shortcut keys, but perhaps too many. Imagine accidently pressing the window key right when an invigilator is passing by. I think I don't have to explain what happens next.
+- Having to switch to a browser to search for an answer is still not feasible.
+
+
+These above, and several other reasons are why this repository exists.
 
 
 ---
 
 
-## What I tried (and absolutely did not work)
+## What this repository offers
 
-- You might be thinking of resolving the taskbar issue by making it auto-hide (which is available in windows settings) as in:
-
-[IMAGE]
-
-but this still looks different because SEB has it's own custom taskbar which is not visible in the patch. Another issue with this solution is that the instructor could potentially see you accidently moving your mouse to the bottom of the screen and the windows taskbar coming up (which is obviously going to be a problem).
-
-- I had one of my friends run SEB in a virtual machine to overcome it's restrictions but this trick straight up failed (nicely played by the developers). 
-
-- Another solution would be to disable the taskbar and the shortcut keys on windows completely but again, SEB has it's own custom taskbar which we cannot get without an overlay on the screen, and just to be realistic here, why bother disabling half of your convenience just for a simple exam? There is a nice solution to all of this, exactly **what I came up with**.
-
-
----
-
-
-## What I came up with
-
-These imperfections in the patch are where this repository comes in. It basically has two modules:
+It basically has two modules:
 
 - An Overlay (the important one)
 
