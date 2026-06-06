@@ -1,6 +1,6 @@
 ## Safe Exam Browser Overlay for Windows
 
-Safe Exam Browser Patches available publicily somehow seem too difficult to use. This repository provides a single-run script that you can use for a setup. Just download the latest `setup.exe` from releases, run it, and you're good to go.
+Safe Exam Browser Patches available publicily somehow seem too difficult to use. This repository provides a single-run script that you can use for a setup, along with an overlay application that adds images onto the screen to make the patched SEB similar to the original.
 
 
 > [!IMPORTANT]
@@ -64,15 +64,16 @@ These above, and several other reasons are why this repository exists.
 
 - `setup/`
 
-This module when run allows for installation of 
+This module when run allows for installation of the compatible version of Safe Exam Browser, and the latest version of the patch itself. The user just has to follow instructions given in a terminal.
 
-- MCQ solver using OCR
 
-Since our shortcut keys are disabled, now we have to figure out some way to actually solve an exam without the instructor noticing us pressing a lot of buttons on our keyboards. AND for the sake of an example lets assume our exam to be Multiple Choice Questions (MCQ-based).
+- `overlay/`
+
+Since our shortcut keys are disabled, now we have to figure out some way to actually solve an exam without the instructor noticing us pressing a lot of buttons on our keyboards.
 
 A nice way around it would be to use [tesseract OCR]() in a python script to read the question on the screen and use some LLM-based api to solve it. Assuming we all want this to be free I have considered using [Gemini](https://gemini.com) for this task. 
 
-And, for the sake of avoiding pressing/holding a lot I have considered using only two keys of the user's choice (configurable in `config.json`). One takes the OCR of the screen to capture a question, and the other displays the answer to the captured question on the screen.
+And, for the sake of avoiding pressing/holding keys a lot I have considered using only two keys of the user's choice (configurable in `config.json`). One takes the OCR of the screen to capture a question, and the other displays the answer to the captured question on the bottom-right corner of the screen.
 
 
 ---
