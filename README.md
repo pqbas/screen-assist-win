@@ -37,7 +37,7 @@ Well, for the patch itself, it looks like this (as of [v1.5.2 release](https://g
 <img src="https://drive.google.com/uc?export=view&id=1_7e6efYbXPae1CKrw-uqAlHcvqDk4AmN" width="600" />
 <br />
 
-Its surprisingly well-made, for the unknown developer who put this much effort into it. But it looks like they intentionally/unknowingly missed the main purpose there, which was to keep the UI looking like the original. For instance, this is what the Safe Browser UI looks like after applying the patch:
+The patch itself is surprisingly well-done. But it looks like they intentionally/unknowingly missed the main purpose there, which was to keep the UI looking like the original. For instance, this is what the Safe Browser UI looks like after applying the patch:
 
 <br />
 <img src="https://drive.google.com/uc?export=view&id=1ED76lOhexxoib-gRNTV8DGu1BV1cYclH" width="600" />
@@ -117,7 +117,7 @@ Ctrl+Win+ArrowKey -> Changes the desktop view
 Three/Four finger swipe -> Opens Task View
 ```
 
-8) There is a half-built question solver module that I put in. It is turned on by default, you basically just press `M` (does OCR and sends the api request to Gemini) and `L` key (displays the answer at a corner of the screen) to use it. If you wish to use it, You may also need to put your gemini api keys in `.env` 
+8) There is a question solver module that I put in. It is turned on by default, you basically just press `M` (does OCR and sends the api request to Gemini) and `L` key (displays the answer at a corner of the screen) to use it. If you wish to use it, You may also need to put your gemini api keys in `.env` 
 
 
 > [!NOTE]
