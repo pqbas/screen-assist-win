@@ -31,7 +31,3 @@ def run():
     print()
     print("Setup completed successfully!")
     print()
-    print("USAGE INSTRUCTIONS:")
-    print("- A program with SEB icon and a configuration file has been added to your desktop.")
-    print("- Everytime before opening SEB, or any link that opens in SEB, you have to double click and open that icon first.")
-    print("- The overlay will automatically activate when SEB is on the screen.")
