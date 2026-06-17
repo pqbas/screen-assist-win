@@ -28,12 +28,13 @@ class OverlayController:
             taskbar_path,
             screen_rect.width(),
             screen_rect.height(),
+            offset_x=50,
         )
 
         close_w, _ = native_image_size(close_button_path)
         self.close_button_overlay = OverlayImage(
             close_button_path,
-            screen_rect.width() - close_w,
+            screen_rect.width() - close_w - 50,
             0,
         )
 

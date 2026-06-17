@@ -62,7 +62,7 @@ class OverlayImage(QLabel):
 class TaskbarOverlay(QWidget):
     """Stretch taskbar.png to full screen width; keep its native height. Shows live clock."""
 
-    def __init__(self, image_path: str, screen_width: int, screen_height: int):
+    def __init__(self, image_path: str, screen_width: int, screen_height: int, offset_x: int = 50):
         super().__init__()
         self.setWindowFlags(
             Qt.WindowType.FramelessWindowHint
@@ -72,13 +72,13 @@ class TaskbarOverlay(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 
         _, height = native_image_size(image_path)
-        width = screen_width
+        width = screen_width - offset_x
         dpr = QApplication.primaryScreen().devicePixelRatio()
 
         # Background image
         self._image = QLabel(self)
         pixmap = QPixmap(image_path).scaled(
-            int(width * dpr),
+            int(screen_width * dpr),
             int(height * dpr),
             Qt.AspectRatioMode.IgnoreAspectRatio,
             Qt.TransformationMode.SmoothTransformation,
@@ -90,12 +90,12 @@ class TaskbarOverlay(QWidget):
         # Live clock (two lines: hour / date)
         style = "color: #000000; background-color: rgb(240, 240, 240);"
         self._time_label = QLabel(self)
-        self._time_label.setFont(QFont("Segoe UI", 8, QFont.Weight.Normal))
+        self._time_label.setFont(QFont("Segoe UI", 9, QFont.Weight.Normal))
         self._time_label.setStyleSheet(style)
         self._time_label.adjustSize()
 
         self._date_label = QLabel(self)
-        self._date_label.setFont(QFont("Segoe UI", 7, QFont.Weight.Normal))
+        self._date_label.setFont(QFont("Segoe UI", 8, QFont.Weight.Normal))
         self._date_label.setStyleSheet(style)
         self._date_label.adjustSize()
 
@@ -108,7 +108,7 @@ class TaskbarOverlay(QWidget):
         self._reposition_clock(width, height)
 
         self.setFixedSize(width, height)
-        self.move(0, screen_height - height)
+        self.move(offset_x, screen_height - height)
 
         self.show()
         self._configure_window()
