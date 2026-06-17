@@ -1,8 +1,10 @@
+from datetime import datetime
+
 import win32con
 import win32gui
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPixmap
-from PyQt6.QtWidgets import QApplication, QLabel
+from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtGui import QFont, QPixmap
+from PyQt6.QtWidgets import QApplication, QLabel, QWidget
 
 
 def native_image_size(image_path: str) -> tuple[int, int]:
@@ -57,8 +59,8 @@ class OverlayImage(QLabel):
         )
 
 
-class TaskbarOverlay(QLabel):
-    """Stretch taskbar.png to full screen width; keep its native height."""
+class TaskbarOverlay(QWidget):
+    """Stretch taskbar.png to full screen width; keep its native height. Shows live clock."""
 
     def __init__(self, image_path: str, screen_width: int, screen_height: int):
         super().__init__()
@@ -73,6 +75,8 @@ class TaskbarOverlay(QLabel):
         width = screen_width
         dpr = QApplication.primaryScreen().devicePixelRatio()
 
+        # Background image
+        self._image = QLabel(self)
         pixmap = QPixmap(image_path).scaled(
             int(width * dpr),
             int(height * dpr),
@@ -80,12 +84,33 @@ class TaskbarOverlay(QLabel):
             Qt.TransformationMode.SmoothTransformation,
         )
         pixmap.setDevicePixelRatio(dpr)
-        self.setPixmap(pixmap)
+        self._image.setPixmap(pixmap)
+        self._image.setFixedSize(width, height)
+
+        # Live clock
+        self._clock = QLabel(self)
+        self._clock.setFont(QFont("Segoe UI", 8, QFont.Weight.Normal))
+        self._clock.setStyleSheet("color: white; background: transparent;")
+        self._clock.adjustSize()
+
+        clock_x = width - 160
+        clock_y = 2
+        self._clock.move(clock_x, clock_y)
+
+        self._timer = QTimer(self)
+        self._timer.timeout.connect(self._update_clock)
+        self._timer.start(1000)
+        self._update_clock()
+
         self.setFixedSize(width, height)
         self.move(0, screen_height - height)
 
         self.show()
         self._configure_window()
+
+    def _update_clock(self):
+        self._clock.setText(datetime.now().strftime("%H:%M  %d/%m/%Y"))
+        self._clock.adjustSize()
 
     def _configure_window(self):
         hwnd = int(self.winId())
