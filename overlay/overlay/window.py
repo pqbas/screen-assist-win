@@ -94,7 +94,7 @@ class TaskbarOverlay(QWidget):
         self._clock.adjustSize()
 
         clock_x = width - 160
-        clock_y = 2
+        clock_y = height - 14
         self._clock.move(clock_x, clock_y)
 
         self._timer = QTimer(self)
