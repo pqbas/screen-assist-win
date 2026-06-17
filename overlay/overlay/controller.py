@@ -1,12 +1,10 @@
 import json
 import subprocess
-from io import BytesIO
 from pathlib import Path
 
 import keyboard
-import win32clipboard
-from PIL import ImageGrab
 
+from overlay.overlay.selector import RegionSelector
 from overlay.overlay.window import OverlayImage, TaskbarOverlay, native_image_size
 from overlay.utils import assets_dir
 
@@ -83,18 +81,9 @@ class OverlayController:
 
     def capture_to_clipboard(self):
         try:
-            img = ImageGrab.grab()
-            output = BytesIO()
-            img.convert("RGB").save(output, format="BMP")
-            data = output.getvalue()[14:]
-            output.close()
-            win32clipboard.OpenClipboard()
-            win32clipboard.EmptyClipboard()
-            win32clipboard.SetClipboardData(win32clipboard.CF_DIB, data)
-            win32clipboard.CloseClipboard()
-            print("[INFO] Screenshot copied to clipboard")
+            self._selector = RegionSelector()
         except Exception as e:
-            print(f"[ERROR] Screenshot failed: {e}")
+            print(f"[ERROR] Region selector failed: {e}")
 
     def open_vscode(self):
         try:
