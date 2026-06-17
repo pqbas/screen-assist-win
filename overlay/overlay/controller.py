@@ -81,37 +81,38 @@ class OverlayController:
             self.unblock_windows_key()
 
     def switch_app(self):
-        if self.visible:
-            self._activate_window("Visual Studio Code")
+        hwnd = self._find_window("Visual Studio Code")
+        if hwnd is None:
+            print("[WARN] VSCode window not found")
+            return
+
+        import win32con
+        import win32gui
+
+        foreground = win32gui.GetForegroundWindow()
+        if hwnd == foreground:
+            win32gui.ShowWindow(hwnd, win32con.SW_MINIMIZE)
+            print("[INFO] VSCode minimized")
         else:
-            self._activate_window("Safe Exam Browser")
-
-    def _activate_window(self, title_part: str) -> bool:
-        try:
-            import win32con
-            import win32gui
-
-            results = []
-
-            def enum_cb(hwnd, _results):
-                if win32gui.IsWindowVisible(hwnd):
-                    title = win32gui.GetWindowText(hwnd)
-                    if title and title_part.lower() in title.lower():
-                        _results.append(hwnd)
-                return True
-
-            win32gui.EnumWindows(enum_cb, results)
-            if results:
-                hwnd = results[0]
+            if win32gui.IsIconic(hwnd):
                 win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
-                win32gui.SetForegroundWindow(hwnd)
-                print(f"[INFO] Activated window: {win32gui.GetWindowText(hwnd)}")
-                return True
-            print(f"[WARN] No window found with title containing '{title_part}'")
-            return False
-        except Exception as e:
-            print(f"[ERROR] _activate_window failed: {e}")
-            return False
+            win32gui.SetForegroundWindow(hwnd)
+            print("[INFO] VSCode restored")
+
+    def _find_window(self, title_part: str):
+        import win32gui
+
+        results = []
+
+        def enum_cb(hwnd, _results):
+            if win32gui.IsWindowVisible(hwnd):
+                title = win32gui.GetWindowText(hwnd)
+                if title and title_part.lower() in title.lower():
+                    _results.append(hwnd)
+            return True
+
+        win32gui.EnumWindows(enum_cb, results)
+        return results[0] if results else None
 
     def capture_to_clipboard(self):
         try:
