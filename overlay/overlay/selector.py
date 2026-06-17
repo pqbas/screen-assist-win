@@ -1,6 +1,5 @@
-import win32clipboard
 from PyQt6.QtCore import Qt, QRect, QPoint
-from PyQt6.QtGui import QPainter, QPen, QColor, QPixmap
+from PyQt6.QtGui import QPainter, QPen, QColor
 from PyQt6.QtWidgets import QWidget, QApplication
 
 
@@ -18,8 +17,8 @@ class RegionSelector(QWidget):
         screen = QApplication.primaryScreen()
         self.setGeometry(screen.geometry())
 
-        self._origin: QPoint | None = None
-        self._current: QPoint | None = None
+        self._origin = None
+        self._current = None
         self._selection = QRect()
 
         self.showFullScreen()
@@ -65,55 +64,6 @@ class RegionSelector(QWidget):
     def _capture_region(self, rect: QRect):
         screen = QApplication.primaryScreen()
         pixmap = screen.grab(rect.x(), rect.y(), rect.width(), rect.height())
-        image = pixmap.toImage()
-
-        width = image.width()
-        height = image.height()
-
-        bmp_header_size = 14
-        dib_header_size = 40
-        row_size = ((width * 24 + 31) // 32) * 4
-        pixel_data_size = row_size * height
-        file_size = bmp_header_size + dib_header_size + pixel_data_size
-
-        data = bytearray()
-        # BMP header
-        data.extend(b'BM')
-        data.extend(file_size.to_bytes(4, 'little'))
-        data.extend(b'\x00\x00\x00\x00')
-        data.extend((bmp_header_size + dib_header_size).to_bytes(4, 'little'))
-        # DIB header
-        data.extend(dib_header_size.to_bytes(4, 'little'))
-        data.extend(width.to_bytes(4, 'little'))
-        data.extend(height.to_bytes(4, 'little'))
-        data.extend((1).to_bytes(2, 'little'))
-        data.extend((24).to_bytes(2, 'little'))
-        data.extend(b'\x00\x00\x00\x00')
-        data.extend(pixel_data_size.to_bytes(4, 'little'))
-        data.extend(b'\x00\x00\x00\x00')
-        data.extend(b'\x00\x00\x00\x00')
-        data.extend(b'\x00\x00\x00\x00')
-        data.extend(b'\x00\x00\x00\x00')
-
-        # Pixel data (bottom-up, BGR)
-        for y in range(height - 1, -1, -1):
-            for x in range(width):
-                px = image.pixelColor(x, y)
-                data.extend([
-                    px.blue(),
-                    px.green(),
-                    px.red(),
-                ])
-            padding = row_size - width * 3
-            data.extend(b'\x00' * padding)
-
-        try:
-            win32clipboard.OpenClipboard()
-            win32clipboard.EmptyClipboard()
-            win32clipboard.SetClipboardData(win32clipboard.CF_DIB, bytes(data))
-            win32clipboard.CloseClipboard()
-            print("[INFO] Region captured to clipboard")
-        except Exception as e:
-            print(f"[ERROR] Clipboard failed: {e}")
-
+        QApplication.clipboard().setPixmap(pixmap)
+        print("[INFO] Region captured to clipboard")
         self.close()
