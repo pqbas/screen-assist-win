@@ -38,6 +38,7 @@ class OverlayController:
         )
 
         self._toggle_hotkey = keyboard.add_hotkey("ctrl+alt+t", self.toggle_visibility)
+        self._switch_hotkey = keyboard.add_hotkey("alt+shift", self.switch_app, suppress=True)
         self._capture_hotkey = keyboard.add_hotkey("ctrl+shift+s", self.capture_to_clipboard)
         self._vscode_hotkey = keyboard.add_hotkey("ctrl+alt+v", self.open_vscode)
 
@@ -59,7 +60,7 @@ class OverlayController:
 
     def shutdown(self):
         print("Closing overlay...")
-        for hk in (self._toggle_hotkey, self._capture_hotkey, self._vscode_hotkey):
+        for hk in (self._toggle_hotkey, self._switch_hotkey, self._capture_hotkey, self._vscode_hotkey):
             try:
                 keyboard.remove_hotkey(hk)
             except Exception:
@@ -78,6 +79,41 @@ class OverlayController:
             self.taskbar_overlay.hide()
             self.close_button_overlay.hide()
             self.unblock_windows_key()
+
+    def switch_app(self):
+        if self.visible:
+            self.toggle_visibility()
+            self._activate_window("Visual Studio Code")
+        else:
+            self._activate_window("Safe Exam Browser")
+            self.toggle_visibility()
+
+    def _activate_window(self, title_part: str) -> bool:
+        try:
+            import win32con
+            import win32gui
+
+            results = []
+
+            def enum_cb(hwnd, _results):
+                if win32gui.IsWindowVisible(hwnd):
+                    title = win32gui.GetWindowText(hwnd)
+                    if title and title_part.lower() in title.lower():
+                        _results.append(hwnd)
+                return True
+
+            win32gui.EnumWindows(enum_cb, results)
+            if results:
+                hwnd = results[0]
+                win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
+                win32gui.SetForegroundWindow(hwnd)
+                print(f"[INFO] Activated window: {win32gui.GetWindowText(hwnd)}")
+                return True
+            print(f"[WARN] No window found with title containing '{title_part}'")
+            return False
+        except Exception as e:
+            print(f"[ERROR] _activate_window failed: {e}")
+            return False
 
     def capture_to_clipboard(self):
         try:
