@@ -87,21 +87,25 @@ class TaskbarOverlay(QWidget):
         self._image.setPixmap(pixmap)
         self._image.setFixedSize(width, height)
 
-        # Live clock
-        self._clock = QLabel(self)
-        self._clock.setFont(QFont("Segoe UI", 8, QFont.Weight.Normal))
-        self._clock.setStyleSheet("color: #000000; background-color: rgb(240, 240, 240);")
-        self._clock.setWordWrap(True)
-        self._clock.adjustSize()
+        # Live clock (two lines: hour / date)
+        style = "color: #000000; background-color: rgb(240, 240, 240);"
+        self._time_label = QLabel(self)
+        self._time_label.setFont(QFont("Segoe UI", 8, QFont.Weight.Normal))
+        self._time_label.setStyleSheet(style)
+        self._time_label.adjustSize()
 
-        clock_x = width - 160
-        clock_y = height - 28
-        self._clock.move(clock_x, clock_y)
+        self._date_label = QLabel(self)
+        self._date_label.setFont(QFont("Segoe UI", 7, QFont.Weight.Normal))
+        self._date_label.setStyleSheet(style)
+        self._date_label.adjustSize()
 
         self._timer = QTimer(self)
         self._timer.timeout.connect(self._update_clock)
         self._timer.start(1000)
         self._update_clock()
+
+        # Reposition labels after first update
+        self._reposition_clock(width, height)
 
         self.setFixedSize(width, height)
         self.move(0, screen_height - height)
@@ -109,10 +113,20 @@ class TaskbarOverlay(QWidget):
         self.show()
         self._configure_window()
 
+    def _reposition_clock(self, taskbar_width, taskbar_height):
+        clock_x = taskbar_width - 160
+        time_h = self._time_label.height()
+        date_h = self._date_label.height()
+        self._time_label.move(clock_x, taskbar_height - time_h - date_h - 1)
+        self._date_label.move(clock_x, taskbar_height - date_h - 1)
+
     def _update_clock(self):
         now = datetime.now()
-        self._clock.setText(f"{now.strftime('%H:%M')}\n{now.strftime('%d/%m/%Y')}")
-        self._clock.adjustSize()
+        self._time_label.setText(now.strftime("%H:%M"))
+        self._time_label.adjustSize()
+        self._date_label.setText(now.strftime("%d/%m/%Y"))
+        self._date_label.adjustSize()
+        self._reposition_clock(self.width(), self.height())
 
     def _configure_window(self):
         hwnd = int(self.winId())
