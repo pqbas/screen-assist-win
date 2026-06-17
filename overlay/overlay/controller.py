@@ -1,5 +1,7 @@
+import json
 import subprocess
 from io import BytesIO
+from pathlib import Path
 
 import keyboard
 import win32clipboard
@@ -16,6 +18,8 @@ class OverlayController:
         screen = app.primaryScreen()
         screen_rect = screen.geometry()
         base = assets_dir()
+
+        self._vscode_folder = self._load_vscode_folder()
 
         self.block_windows_key()
 
@@ -94,10 +98,27 @@ class OverlayController:
 
     def open_vscode(self):
         try:
-            subprocess.Popen(["code"], shell=True)
-            print("[INFO] Launching VSCode")
+            folder = self._vscode_folder
+            if folder:
+                subprocess.Popen(["code", folder], shell=True)
+                print(f"[INFO] Launching VSCode in {folder}")
+            else:
+                subprocess.Popen(["code"], shell=True)
+                print("[INFO] Launching VSCode (no folder configured)")
         except Exception as e:
             print(f"[ERROR] Failed to open VSCode: {e}")
+
+    def _load_vscode_folder(self) -> str | None:
+        config_path = Path(__file__).resolve().parent.parent / "config.json"
+        if not config_path.exists():
+            return None
+        try:
+            with open(config_path) as f:
+                cfg = json.load(f)
+            folder = cfg.get("vscode_folder", "").strip()
+            return folder if folder else None
+        except Exception:
+            return None
 
 
 def run(app) -> OverlayController:
