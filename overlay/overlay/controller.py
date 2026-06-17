@@ -4,7 +4,7 @@ from pathlib import Path
 
 import keyboard
 
-from overlay.overlay.selector import RegionSelector
+from overlay.overlay.selector import capture_fullscreen
 from overlay.overlay.window import OverlayImage, TaskbarOverlay, native_image_size
 from overlay.utils import assets_dir
 
@@ -115,10 +115,7 @@ class OverlayController:
         return results[0] if results else None
 
     def capture_to_clipboard(self):
-        try:
-            self._selector = RegionSelector()
-        except Exception as e:
-            print(f"[ERROR] Region selector failed: {e}")
+        capture_fullscreen()
 
     def open_vscode(self):
         try:
