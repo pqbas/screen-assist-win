@@ -82,11 +82,9 @@ class OverlayController:
 
     def switch_app(self):
         if self.visible:
-            self.toggle_visibility()
             self._activate_window("Visual Studio Code")
         else:
             self._activate_window("Safe Exam Browser")
-            self.toggle_visibility()
 
     def _activate_window(self, title_part: str) -> bool:
         try:
