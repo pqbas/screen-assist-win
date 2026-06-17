@@ -1,22 +1,24 @@
-from PyQt6.QtCore import QObject, pyqtSignal
-from PyQt6.QtWidgets import QApplication
+import threading
+from io import BytesIO
+
+import win32clipboard
+from PIL import ImageGrab
 
 
-class CaptureManager(QObject):
-    capture_requested = pyqtSignal()
-
-    def __init__(self):
-        super().__init__()
-        self.capture_requested.connect(self._do_capture)
-
-    def request_capture(self):
-        self.capture_requested.emit()
-
-    def _do_capture(self):
+def capture_fullscreen():
+    def worker():
         try:
-            screen = QApplication.primaryScreen()
-            pixmap = screen.grabWindow(0)
-            QApplication.clipboard().setPixmap(pixmap)
+            img = ImageGrab.grab()
+            output = BytesIO()
+            img.convert("RGB").save(output, format="BMP")
+            data = output.getvalue()[14:]
+            output.close()
+            win32clipboard.OpenClipboard()
+            win32clipboard.EmptyClipboard()
+            win32clipboard.SetClipboardData(win32clipboard.CF_DIB, data)
+            win32clipboard.CloseClipboard()
             print("[INFO] Full screen captured to clipboard")
         except Exception as e:
             print(f"[ERROR] Screenshot failed: {e}")
+
+    threading.Thread(target=worker, daemon=True).start()

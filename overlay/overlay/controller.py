@@ -4,7 +4,7 @@ from pathlib import Path
 
 import keyboard
 
-from overlay.overlay.selector import CaptureManager
+from overlay.overlay.selector import capture_fullscreen
 from overlay.overlay.window import OverlayImage, TaskbarOverlay, native_image_size
 from overlay.utils import assets_dir
 
@@ -39,8 +39,7 @@ class OverlayController:
 
         self._toggle_hotkey = keyboard.add_hotkey("ctrl+alt+t", self.toggle_visibility)
         self._switch_hotkey = keyboard.add_hotkey("alt+shift", self.switch_app, suppress=True)
-        self._capture_mgr = CaptureManager()
-        self._capture_hotkey = keyboard.add_hotkey("ctrl+shift+s", self._capture_mgr.request_capture)
+        self._capture_hotkey = keyboard.add_hotkey("ctrl+shift+s", self.capture_to_clipboard)
         self._vscode_hotkey = keyboard.add_hotkey("ctrl+alt+v", self.open_vscode)
 
     def block_windows_key(self):
@@ -116,7 +115,7 @@ class OverlayController:
         return results[0] if results else None
 
     def capture_to_clipboard(self):
-        self._capture_mgr.request_capture()
+        capture_fullscreen()
 
     def open_vscode(self):
         try:
