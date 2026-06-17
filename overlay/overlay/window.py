@@ -114,7 +114,7 @@ class TaskbarOverlay(QWidget):
         self._configure_window()
 
     def _reposition_clock(self, taskbar_width, taskbar_height):
-        clock_x = taskbar_width - 130
+        clock_x = taskbar_width - 150
         time_h = self._time_label.height()
         date_h = self._date_label.height()
         self._time_label.move(clock_x, taskbar_height - time_h - date_h - 3)
