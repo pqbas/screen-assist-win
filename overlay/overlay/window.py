@@ -95,6 +95,7 @@ class TaskbarOverlay(QWidget):
         self._time_label.setFont(time_font)
         self._time_label.setStyleSheet(style)
         self._time_label.adjustSize()
+        self._time_label.setFixedWidth(self._time_label.width() + 40)
 
         date_font = QFont("Segoe UI", 8, QFont.Weight.Bold)
         date_font.setStretch(155)
