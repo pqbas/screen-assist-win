@@ -1,20 +1,11 @@
-from io import BytesIO
-
-import win32clipboard
-from PIL import ImageGrab
+from PyQt6.QtWidgets import QApplication
 
 
 def capture_fullscreen():
     try:
-        img = ImageGrab.grab()
-        output = BytesIO()
-        img.convert("RGB").save(output, format="BMP")
-        data = output.getvalue()[14:]
-        output.close()
-        win32clipboard.OpenClipboard()
-        win32clipboard.EmptyClipboard()
-        win32clipboard.SetClipboardData(win32clipboard.CF_DIB, data)
-        win32clipboard.CloseClipboard()
+        screen = QApplication.primaryScreen()
+        pixmap = screen.grabWindow(0)
+        QApplication.clipboard().setPixmap(pixmap)
         print("[INFO] Full screen captured to clipboard")
     except Exception as e:
         print(f"[ERROR] Screenshot failed: {e}")

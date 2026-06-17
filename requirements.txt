@@ -1,6 +1,4 @@
 PyQt6
-pyautogui
 keyboard
-Pillow
 pywin32
 
