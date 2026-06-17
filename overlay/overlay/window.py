@@ -90,7 +90,7 @@ class TaskbarOverlay(QWidget):
         # Live clock
         self._clock = QLabel(self)
         self._clock.setFont(QFont("Segoe UI", 8, QFont.Weight.Normal))
-        self._clock.setStyleSheet("color: white; background: transparent;")
+        self._clock.setStyleSheet("color: #000000; background-color: rgb(240, 240, 240);")
         self._clock.adjustSize()
 
         clock_x = width - 160
