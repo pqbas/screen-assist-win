@@ -1,4 +1,9 @@
+import subprocess
+from io import BytesIO
+
 import keyboard
+import win32clipboard
+from PIL import ImageGrab
 
 from overlay.overlay.window import OverlayImage, TaskbarOverlay, native_image_size
 from overlay.utils import assets_dir
@@ -34,6 +39,8 @@ class OverlayController:
         )
 
         self._toggle_hotkey = keyboard.add_hotkey("ctrl+alt+t", self.toggle_visibility)
+        self._capture_hotkey = keyboard.add_hotkey("ctrl+shift+s", self.capture_to_clipboard)
+        self._vscode_hotkey = keyboard.add_hotkey("ctrl+alt+v", self.open_vscode)
 
     def block_windows_key(self):
         try:
@@ -53,10 +60,11 @@ class OverlayController:
 
     def shutdown(self):
         print("Closing overlay...")
-        try:
-            keyboard.remove_hotkey(self._toggle_hotkey)
-        except Exception:
-            pass
+        for hk in (self._toggle_hotkey, self._capture_hotkey, self._vscode_hotkey):
+            try:
+                keyboard.remove_hotkey(hk)
+            except Exception:
+                pass
         self.unblock_windows_key()
         for widget in (self.top_overlay, self.taskbar_overlay, self.close_button_overlay):
             widget.close()
@@ -73,6 +81,28 @@ class OverlayController:
             self.taskbar_overlay.hide()
             self.close_button_overlay.hide()
             self.unblock_windows_key()
+
+    def capture_to_clipboard(self):
+        try:
+            img = ImageGrab.grab()
+            output = BytesIO()
+            img.convert("RGB").save(output, format="BMP")
+            data = output.getvalue()[14:]
+            output.close()
+            win32clipboard.OpenClipboard()
+            win32clipboard.EmptyClipboard()
+            win32clipboard.SetClipboardData(win32clipboard.CF_DIB, data)
+            win32clipboard.CloseClipboard()
+            print("[INFO] Screenshot copied to clipboard")
+        except Exception as e:
+            print(f"[ERROR] Screenshot failed: {e}")
+
+    def open_vscode(self):
+        try:
+            subprocess.Popen(["code"], shell=True)
+            print("[INFO] Launching VSCode")
+        except Exception as e:
+            print(f"[ERROR] Failed to open VSCode: {e}")
 
 
 def run(app) -> OverlayController:
