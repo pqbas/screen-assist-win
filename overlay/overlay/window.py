@@ -62,7 +62,7 @@ class OverlayImage(QLabel):
 class TaskbarOverlay(QWidget):
     """Stretch taskbar.png to full screen width; keep its native height. Shows live clock."""
 
-    def __init__(self, image_path: str, screen_width: int, screen_height: int, offset_x: int = 50):
+    def __init__(self, image_path: str, screen_width: int, screen_height: int):
         super().__init__()
         self.setWindowFlags(
             Qt.WindowType.FramelessWindowHint
@@ -72,13 +72,13 @@ class TaskbarOverlay(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 
         _, height = native_image_size(image_path)
-        width = screen_width - offset_x
+        width = screen_width
         dpr = QApplication.primaryScreen().devicePixelRatio()
 
         # Background image
         self._image = QLabel(self)
         pixmap = QPixmap(image_path).scaled(
-            int(screen_width * dpr),
+            int(width * dpr),
             int(height * dpr),
             Qt.AspectRatioMode.IgnoreAspectRatio,
             Qt.TransformationMode.SmoothTransformation,
@@ -108,13 +108,13 @@ class TaskbarOverlay(QWidget):
         self._reposition_clock(width, height)
 
         self.setFixedSize(width, height)
-        self.move(offset_x, screen_height - height)
+        self.move(0, screen_height - height)
 
         self.show()
         self._configure_window()
 
     def _reposition_clock(self, taskbar_width, taskbar_height):
-        clock_x = taskbar_width - 160
+        clock_x = taskbar_width - 110
         time_h = self._time_label.height()
         date_h = self._date_label.height()
         self._time_label.move(clock_x, taskbar_height - time_h - date_h - 1)
