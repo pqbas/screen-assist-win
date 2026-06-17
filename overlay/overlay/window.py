@@ -90,12 +90,12 @@ class TaskbarOverlay(QWidget):
         # Live clock (two lines: hour / date)
         style = "color: #000000; background-color: rgb(240, 240, 240);"
         self._time_label = QLabel(self)
-        self._time_label.setFont(QFont("Segoe UI", 9, QFont.Weight.Normal))
+        self._time_label.setFont(QFont("Segoe UI", 9, QFont.Weight.Bold))
         self._time_label.setStyleSheet(style)
         self._time_label.adjustSize()
 
         self._date_label = QLabel(self)
-        self._date_label.setFont(QFont("Segoe UI", 8, QFont.Weight.Normal))
+        self._date_label.setFont(QFont("Segoe UI", 8, QFont.Weight.Bold))
         self._date_label.setStyleSheet(style)
         self._date_label.adjustSize()
 
@@ -117,8 +117,8 @@ class TaskbarOverlay(QWidget):
         clock_x = taskbar_width - 110
         time_h = self._time_label.height()
         date_h = self._date_label.height()
-        self._time_label.move(clock_x, taskbar_height - time_h - date_h - 1)
-        self._date_label.move(clock_x, taskbar_height - date_h - 1)
+        self._time_label.move(clock_x, taskbar_height - time_h - date_h - 3)
+        self._date_label.move(clock_x, taskbar_height - date_h - 3)
 
     def _update_clock(self):
         now = datetime.now()
