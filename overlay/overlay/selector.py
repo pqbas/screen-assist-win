@@ -1,5 +1,3 @@
-from io import BytesIO
-
 import win32clipboard
 from PyQt6.QtCore import Qt, QRect, QPoint
 from PyQt6.QtGui import QPainter, QPen, QColor, QPixmap
@@ -19,11 +17,12 @@ class RegionSelector(QWidget):
 
         screen = QApplication.primaryScreen()
         self.setGeometry(screen.geometry())
-        self.showFullScreen()
 
         self._origin: QPoint | None = None
         self._current: QPoint | None = None
         self._selection = QRect()
+
+        self.showFullScreen()
 
     def paintEvent(self, event):
         painter = QPainter(self)
@@ -70,9 +69,6 @@ class RegionSelector(QWidget):
 
         width = image.width()
         height = image.height()
-
-        buffer = image.convertToFormat(image.Format.Format_ARGB32).bits()
-        buffer.setsize(width * height * 4)
 
         bmp_header_size = 14
         dib_header_size = 40
