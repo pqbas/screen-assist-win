@@ -19,11 +19,8 @@ class OverlayController:
 
         self.block_windows_key()
 
-        reload_path = str(base / "reload.png")
         taskbar_path = str(base / "taskbar.png")
         close_button_path = str(base / "close_button.png")
-
-        self.top_overlay = OverlayImage(reload_path, 0, 37)
 
         self.taskbar_overlay = TaskbarOverlay(
             taskbar_path,
@@ -66,18 +63,16 @@ class OverlayController:
             except Exception:
                 pass
         self.unblock_windows_key()
-        for widget in (self.top_overlay, self.taskbar_overlay, self.close_button_overlay):
+        for widget in (self.taskbar_overlay, self.close_button_overlay):
             widget.close()
 
     def toggle_visibility(self):
         self.visible = not self.visible
         if self.visible:
-            self.top_overlay.show()
             self.taskbar_overlay.show()
             self.close_button_overlay.show()
             self.block_windows_key()
         else:
-            self.top_overlay.hide()
             self.taskbar_overlay.hide()
             self.close_button_overlay.hide()
             self.unblock_windows_key()
