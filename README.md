@@ -20,7 +20,7 @@ The Win key is automatically blocked while the overlay is visible, and unblocked
 
 - Python 3.11+
 - Windows (uses win32 APIs)
-- [Tesseract-OCR](https://github.com/tesseract-ocr/tesseract) (optional, only if you re-enable OCR features)
+- VSCode installed and `code` command available in PATH
 
 ---
 
@@ -44,7 +44,7 @@ After the overlay starts, press `Ctrl+Alt+T` to hide/show it. Screenshots go to 
 setup/          Downloads and installs compatible SEB version + patch
 overlay/        Main overlay application
   overlay/      PyQt6 window layer + hotkey controller
-  mcq/          OCR + Gemini solver (currently disabled)
+  mcq/          OCR + Gemini solver (removed)
 assets/         PNG images used by the overlay (taskbar, buttons)
 ```
 

@@ -1,11 +1,6 @@
-google-generativeai
-PyQt5
+PyQt6
 pyautogui
-pyperclip
 keyboard
-pytesseract
 Pillow
-polars
 pywin32
-python-dotenv
 
