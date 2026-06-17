@@ -91,10 +91,11 @@ class TaskbarOverlay(QWidget):
         self._clock = QLabel(self)
         self._clock.setFont(QFont("Segoe UI", 8, QFont.Weight.Normal))
         self._clock.setStyleSheet("color: #000000; background-color: rgb(240, 240, 240);")
+        self._clock.setWordWrap(True)
         self._clock.adjustSize()
 
         clock_x = width - 160
-        clock_y = height - 14
+        clock_y = height - 28
         self._clock.move(clock_x, clock_y)
 
         self._timer = QTimer(self)
@@ -109,7 +110,8 @@ class TaskbarOverlay(QWidget):
         self._configure_window()
 
     def _update_clock(self):
-        self._clock.setText(datetime.now().strftime("%H:%M  %d/%m/%Y"))
+        now = datetime.now()
+        self._clock.setText(f"{now.strftime('%H:%M')}\n{now.strftime('%d/%m/%Y')}")
         self._clock.adjustSize()
 
     def _configure_window(self):
