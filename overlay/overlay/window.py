@@ -90,14 +90,14 @@ class TaskbarOverlay(QWidget):
         # Live clock (two lines: hour / date)
         style = "color: #000000; background-color: rgb(240, 240, 240);"
         time_font = QFont("Segoe UI", 9, QFont.Weight.Bold)
-        time_font.setStretch(140)
+        time_font.setStretch(155)
         self._time_label = QLabel(self)
         self._time_label.setFont(time_font)
         self._time_label.setStyleSheet(style)
         self._time_label.adjustSize()
 
         date_font = QFont("Segoe UI", 8, QFont.Weight.Bold)
-        date_font.setStretch(140)
+        date_font.setStretch(155)
         self._date_label = QLabel(self)
         self._date_label.setFont(date_font)
         self._date_label.setStyleSheet(style)
